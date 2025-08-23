@@ -2,7 +2,7 @@
 
 > Administrative panel for **mini-exchange** cryptocurrency exchange. Built with **Next.js + TypeScript + Tailwind CSS + shadcn/ui + TanStack Query + next-intl** for data management through **mini-exchange-backend** REST APIs.
 
-## 🚀 Project Status
+## Project Status
 
 - ✅ **Project Setup**: Complete Next.js 14 framework with TypeScript
 - ✅ **UI Components**: shadcn/ui components with Tailwind CSS
@@ -14,7 +14,7 @@
 - 📋 **User Management**: Planned
 - 📋 **Trading Features**: Planned
 
-## 🧪 Demo Credentials
+## Demo Credentials
 
 The application includes demo accounts for testing:
 
