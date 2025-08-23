@@ -39,8 +39,6 @@ The application includes demo accounts for testing:
 
 ---
 
----
-
 ## Quick Start
 
 ```bash
