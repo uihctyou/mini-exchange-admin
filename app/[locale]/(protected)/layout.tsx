@@ -15,27 +15,26 @@ interface ProtectedLayoutProps {
 }
 
 export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
-  const { isAuthenticated, isLoading, initializeAuth } = useAuth();
+  const { isAuthenticated, isLoading, initialized, initialize } = useAuth();
   const router = useRouter();
   const locale = useLocale();
 
   // Initialize authentication state on mount
   useEffect(() => {
-    const init = async () => {
-      await initializeAuth();
-    };
-    init();
-  }, [initializeAuth]);
+    if (!initialized) {
+      initialize();
+    }
+  }, [initialized, initialize]);
 
-  // Redirect to login if not authenticated
+  // Redirect to login if not authenticated after initialization
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (initialized && !isLoading && !isAuthenticated) {
       router.replace(`/${locale}/login`);
     }
-  }, [isAuthenticated, isLoading, router, locale]);
+  }, [initialized, isAuthenticated, isLoading, router, locale]);
 
-  // Show loading while checking authentication
-  if (isLoading) {
+  // Show loading while initializing or checking authentication
+  if (!initialized || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>

@@ -30,40 +30,34 @@ export default function LoginPage() {
   const t = useTranslations();
   const router = useRouter();
   const locale = useLocale();
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, error: authError, clearError } = useAuth();
 
   // Form state
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   const canSubmit = usernameOrEmail && password && !isLoading;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    clearError();
     setSuccess(false);
 
     if (!canSubmit) return;
 
-    try {
-      await login(usernameOrEmail, password, remember);
-      // Show success message briefly before redirect
+    const result = await login(usernameOrEmail, password, remember);
+    
+    if (result.success) {
       setSuccess(true);
+      // Redirect after successful login
       setTimeout(() => {
-        // Use window.location for a hard redirect to ensure it works
-        window.location.href = `/${locale}/dashboard`;
+        router.push(`/${locale}/dashboard`);
       }, 1000);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'Login failed. Please check your credentials.'
-      );
     }
+    // Error is now handled by the auth store
   };
 
   return (
@@ -105,14 +99,14 @@ export default function LoginPage() {
               )}
 
               {/* Error Alert */}
-              {error && (
+              {authError && (
                 <Alert
                   variant="destructive"
                   className="border-red-200 bg-red-50"
                 >
                   <AlertCircle className="h-4 w-4 text-red-600" />
                   <AlertDescription className="text-red-700">
-                    {error}
+                    {authError.message}
                   </AlertDescription>
                 </Alert>
               )}
@@ -135,18 +129,18 @@ export default function LoginPage() {
                   value={usernameOrEmail}
                   onChange={(e) => {
                     setUsernameOrEmail(e.target.value);
-                    setError('');
+                    clearError();
                     setSuccess(false);
                   }}
                   className={`${
-                    usernameOrEmail
+                    usernameOrEmail === ''
                       ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
                       : ''
                   }`}
                 />
-                {usernameOrEmail && (
+                {usernameOrEmail === '' && (
                   <p className="text-sm text-red-600">
-                    {t('validation.email')}
+                    {t('validation.emailOrUsername')}
                   </p>
                 )}
               </div>
@@ -170,7 +164,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => {
                       setPassword(e.target.value);
-                      setError('');
+                      clearError();
                       setSuccess(false);
                     }}
                     className="pr-10"
