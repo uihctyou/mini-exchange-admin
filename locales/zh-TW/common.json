@@ -172,21 +172,49 @@
     "timezone": "時區"
   },
   "errors": {
+    "401": "未授權",
+    "403": "拒絕存取",
     "404": "頁面未找到",
     "500": "內部伺服器錯誤",
-    "403": "拒絕存取",
-    "401": "未授權",
     "networkError": "網路錯誤",
     "validationError": "驗證錯誤",
     "unknownError": "發生未知錯誤"
   },
   "validation": {
     "required": "此欄位為必填",
-    "email": "請輸入有效的電子郵件地址",
+    "email": "請輸入有效的電子郵件地址或用戶名",
     "password": "密碼至少需要 8 個字元",
     "minLength": "最少需要 {min} 個字元",
     "maxLength": "最多只能有 {max} 個字元",
     "numeric": "此欄位必須為數字",
     "positive": "此欄位必須為正數"
+  },
+  "Dashboard": {
+    "title": "儀表板",
+    "description": "歡迎使用迷你交易所管理後台",
+    "stats": {
+      "totalUsers": "總用戶數",
+      "totalTrades": "總交易次數",
+      "volume": "交易量",
+      "activeOrders": "活躍訂單",
+      "totalVolume": "總交易量",
+      "revenue": "營收"
+    },
+    "charts": {
+      "tradingVolume": "交易量",
+      "userActivity": "用戶活動",
+      "orderBook": "訂單簿",
+      "priceChart": "價格圖表"
+    },
+    "recentActivity": "最近活動",
+    "quickActions": "快速操作",
+    "recentTrades": {
+      "title": "最近交易",
+      "description": "最新交易活動"
+    },
+    "systemStatus": {
+      "title": "系統狀態",
+      "description": "目前系統健康狀況"
+    }
   }
 }

@@ -21,7 +21,10 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
 
   // Initialize authentication state on mount
   useEffect(() => {
-    initializeAuth();
+    const init = async () => {
+      await initializeAuth();
+    };
+    init();
   }, [initializeAuth]);
 
   // Redirect to login if not authenticated

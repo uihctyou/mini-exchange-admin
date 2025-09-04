@@ -49,13 +49,13 @@ const API_ROUTES = [
  * Check if the user is authenticated by looking for auth tokens
  */
 function isAuthenticated(request: NextRequest): boolean {
-  const authMode = process.env.AUTH_MODE || 'BFF';
+  const authMode = process.env.NEXT_PUBLIC_AUTH_MODE || 'BFF';
   
   if (authMode === 'DIRECT') {
     // In DIRECT mode, we can't reliably check localStorage from middleware
     // But we can check if there's an Authorization header
     const authHeader = request.headers.get('authorization');
-    if (authHeader?.includes('mock-jwt-token') || authHeader?.startsWith('Bearer ')) {
+    if (authHeader?.startsWith('Bearer ')) {
       return true;
     }
     
@@ -68,14 +68,14 @@ function isAuthenticated(request: NextRequest): boolean {
   const cookieToken = request.cookies.get('access_token')?.value;
   const sessionToken = request.cookies.get('session_token')?.value;
   
-  // For mock implementation, check for our mock token pattern
-  if (cookieToken?.startsWith('mock-jwt-token') || 
-      sessionToken?.startsWith('mock-jwt-token')) {
+  // Validate JWT token here (in production, verify signature and expiration)
+  if (cookieToken || sessionToken) {
+    // For now, assume any token is valid
+    // In production, you would verify the JWT signature and expiration
     return true;
   }
   
-  // In production, you would validate the JWT token here
-  return Boolean(cookieToken || sessionToken);
+  return false;
 }
 
 /**
@@ -137,7 +137,7 @@ export default function middleware(request: NextRequest) {
     return NextResponse.next();
   }
   
-  const authMode = process.env.AUTH_MODE || 'BFF';
+  const authMode = process.env.NEXT_PUBLIC_AUTH_MODE || 'BFF';
   
   // In DIRECT mode, skip server-side auth checks
   // Let client-side components handle authentication

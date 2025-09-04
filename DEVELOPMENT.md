@@ -97,10 +97,10 @@ Key environment variables in `.env.local`:
 
 ```bash
 # Authentication mode (BFF recommended for production)
-AUTH_MODE=BFF
+NEXT_PUBLIC_AUTH_MODE=BFF
 
 # Backend API URL
-EXCHANGE_API_BASE_URL=http://localhost:8080
+NEXT_PUBLIC_EXCHANGE_API_BASE_URL=http://localhost:9977/api
 
 # Cookie settings (BFF mode)
 AUTH_COOKIE_NAME=access_token

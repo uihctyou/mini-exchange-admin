@@ -12,44 +12,11 @@ import {
   getCurrentUser, 
   logout as authLogout, 
   isAuthenticated,
+  isTokenExpired,
   setClientAuthToken,
   removeClientAuthToken,
 } from '@/lib/auth';
-import { httpClient } from '@/lib/http';
-
-// Mock users for development (remove in production)
-const MOCK_USERS = {
-  'admin@example.com': {
-    id: '1',
-    email: 'admin@example.com',
-    name: 'Admin User',
-    roles: [UserRole.ADMIN],
-    isActive: true,
-    createdAt: new Date(),
-  },
-  'operator@example.com': {
-    id: '2',
-    email: 'operator@example.com',
-    name: 'Operator User',
-    roles: [UserRole.OPERATOR],
-    isActive: true,
-    createdAt: new Date(),
-  },
-  'auditor@example.com': {
-    id: '3',
-    email: 'auditor@example.com',
-    name: 'Auditor User',
-    roles: [UserRole.AUDITOR],
-    isActive: true,
-    createdAt: new Date(),
-  },
-};
-
-const MOCK_PASSWORDS = {
-  'admin@example.com': 'admin123',
-  'operator@example.com': 'operator123',
-  'auditor@example.com': 'auditor123',
-};
+import { API } from '@/lib/api';
 
 // Authentication state interface
 interface AuthState {
@@ -59,33 +26,12 @@ interface AuthState {
   isAuthenticated: boolean;
   
   // Actions
-  login: (email: string, password: string, remember?: boolean) => Promise<void>;
+  login: (usernameOrEmail: string, password: string, remember?: boolean) => Promise<void>;
   logout: () => Promise<void>;
-  refreshUser: () => void;
+  refreshUser: () => Promise<void>;
   setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
   checkAuth: () => boolean;
-}
-
-// Mock login function (replace with real API call)
-async function mockLogin(email: string, password: string): Promise<{ user: User; token: string }> {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  const mockUser = MOCK_USERS[email as keyof typeof MOCK_USERS];
-  const mockPassword = MOCK_PASSWORDS[email as keyof typeof MOCK_PASSWORDS];
-  
-  if (!mockUser || mockPassword !== password) {
-    throw new Error('Invalid email or password');
-  }
-  
-  // Generate a mock JWT token
-  const mockToken = `mock-jwt-token-${Date.now()}`;
-  
-  return {
-    user: mockUser,
-    token: mockToken,
-  };
 }
 
 // Create the authentication store
@@ -98,18 +44,21 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
 
       // Login action
-      login: async (email: string, password: string, remember = false) => {
+      login: async (usernameOrEmail: string, password: string, remember = false) => {
         set({ isLoading: true });
         
         try {
-          // For development, use mock login
-          const { user, token } = await mockLogin(email, password);
+          const response = await API.auth.login({ usernameOrEmail, password });
           
-          // In production, this would be:
-          // const response = await httpClient.post('/auth/login', {
-          //   email,
-          //   password,
-          // }, { skipAuth: true });
+          if (response.status === 'error') {
+            throw new Error(response.error?.message || 'Login failed');
+          }
+          
+          if (!response.body) {
+            throw new Error('No data received from login');
+          }
+          
+          const { user, token } = response.body;
           
           // Store token (client-side for Direct mode)
           setClientAuthToken(token, remember);
@@ -135,8 +84,8 @@ export const useAuthStore = create<AuthState>()(
           // Clear tokens
           removeClientAuthToken();
           
-          // In production, also call logout API
-          // await authLogout();
+          // Call logout API
+          await authLogout();
         } catch (error) {
           console.error('Logout error:', error);
         }
@@ -150,29 +99,55 @@ export const useAuthStore = create<AuthState>()(
       },
 
       // Refresh user data from stored token
-      refreshUser: () => {
+      refreshUser: async () => {
+        set({ isLoading: true });
+        
         try {
-          // In production, this would validate the token and get user data
+          // Check if we have a stored token
           const stored = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
           
-          if (stored && stored.startsWith('mock-jwt-token')) {
-            // For mock, get the first user as logged in
-            const firstUser = Object.values(MOCK_USERS)[0];
-            set({
-              user: firstUser,
-              isAuthenticated: true,
-            });
+          if (stored && !isTokenExpired(stored)) {
+            try {
+              // Try to get current user info from API
+              const response = await API.auth.getCurrentUser();
+              
+              if (response.status === 'error') {
+                throw new Error(response.error?.message || 'Failed to get user');
+              }
+              
+              set({
+                user: response.body,
+                isAuthenticated: true,
+                isLoading: false,
+              });
+            } catch (apiError) {
+              // If API call fails, try to get user from token
+              const user = getCurrentUser();
+              if (user) {
+                set({
+                  user,
+                  isAuthenticated: true,
+                  isLoading: false,
+                });
+              } else {
+                throw apiError;
+              }
+            }
           } else {
             set({
               user: null,
               isAuthenticated: false,
+              isLoading: false,
             });
           }
         } catch (error) {
           console.error('Error refreshing user:', error);
+          // Clear invalid tokens
+          removeClientAuthToken();
           set({
             user: null,
             isAuthenticated: false,
+            isLoading: false,
           });
         }
       },
@@ -211,9 +186,9 @@ export function useAuth() {
   const auth = useAuthStore();
   
   // Initialize user from token on mount
-  const initializeAuth = () => {
+  const initializeAuth = async () => {
     if (typeof window !== 'undefined') {
-      auth.refreshUser();
+      await auth.refreshUser();
     }
   };
 

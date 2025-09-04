@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Mini Exchange Admin",
+    "name": "Mini Exchange Backend Dashboard",
     "description": "Administrative panel for cryptocurrency exchange"
   },
   "nav": {
@@ -205,21 +205,49 @@
     "timezone": "Timezone"
   },
   "errors": {
+    "401": "Unauthorized",
+    "403": "Access denied",
     "404": "Page not found",
     "500": "Internal server error",
-    "403": "Access denied",
-    "401": "Unauthorized",
     "networkError": "Network error",
     "validationError": "Validation error",
     "unknownError": "Unknown error occurred"
   },
   "validation": {
     "required": "This field is required",
-    "email": "Please enter a valid email address",
+    "email": "Please enter a valid email address or username",
     "password": "Password must be at least 8 characters",
     "minLength": "Minimum length is {min} characters",
     "maxLength": "Maximum length is {max} characters",
     "numeric": "This field must be a number",
     "positive": "This field must be a positive number"
+  },
+  "Dashboard": {
+    "title": "Dashboard",
+    "description": "Welcome to the Mini Exchange Admin Panel",
+    "stats": {
+      "totalUsers": "Total Users",
+      "totalTrades": "Total Trades",
+      "volume": "Trading Volume",
+      "activeOrders": "Active Orders",
+      "totalVolume": "Total Volume",
+      "revenue": "Revenue"
+    },
+    "charts": {
+      "tradingVolume": "Trading Volume",
+      "userActivity": "User Activity",
+      "orderBook": "Order Book",
+      "priceChart": "Price Chart"
+    },
+    "recentActivity": "Recent Activity",
+    "quickActions": "Quick Actions",
+    "recentTrades": {
+      "title": "Recent Trades",
+      "description": "Latest trading activity"
+    },
+    "systemStatus": {
+      "title": "System Status",
+      "description": "Current system health"
+    }
   }
 }

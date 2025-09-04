@@ -12,7 +12,7 @@ import { env, cookieConfig } from './env';
  * Use this in API routes or server components
  */
 export async function getServerAuthToken(): Promise<string | null> {
-  if (env.AUTH_MODE !== 'BFF') return null;
+  if (env.NEXT_PUBLIC_AUTH_MODE !== 'BFF') return null;
 
   try {
     const cookieStore = cookies();
@@ -36,7 +36,7 @@ export function getTokenFromRequest(request: NextRequest): string | null {
   }
 
   // Try cookies (BFF mode)
-  if (env.AUTH_MODE === 'BFF') {
+  if (env.NEXT_PUBLIC_AUTH_MODE === 'BFF') {
     const token = request.cookies.get(cookieConfig.name);
     return token?.value || null;
   }

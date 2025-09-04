@@ -14,10 +14,10 @@ const envSchema = z.object({
   PORT: z.string().transform(Number).default('3000'),
   
   // Authentication mode
-  AUTH_MODE: z.enum(['BFF', 'DIRECT']).default('BFF'),
+  NEXT_PUBLIC_AUTH_MODE: z.enum(['BFF', 'DIRECT']).default('BFF'),
   
   // Backend API configuration
-  EXCHANGE_API_BASE_URL: z.string().url().default('http://localhost:8080'),
+  NEXT_PUBLIC_EXCHANGE_API_BASE_URL: z.string().url().default('http://localhost:9977'),
   
   // Cookie settings (for BFF mode)
   AUTH_COOKIE_NAME: z.string().default('access_token'),
@@ -43,8 +43,8 @@ function parseEnv() {
   const env = {
     NODE_ENV: process.env.NODE_ENV,
     PORT: process.env.PORT,
-    AUTH_MODE: process.env.AUTH_MODE,
-    EXCHANGE_API_BASE_URL: process.env.EXCHANGE_API_BASE_URL,
+    NEXT_PUBLIC_AUTH_MODE: process.env.NEXT_PUBLIC_AUTH_MODE,
+    NEXT_PUBLIC_EXCHANGE_API_BASE_URL: process.env.NEXT_PUBLIC_EXCHANGE_API_BASE_URL,
     AUTH_COOKIE_NAME: process.env.AUTH_COOKIE_NAME,
     AUTH_COOKIE_SECURE: process.env.AUTH_COOKIE_SECURE,
     AUTH_COOKIE_SAMESITE: process.env.AUTH_COOKIE_SAMESITE,
@@ -86,7 +86,7 @@ export const supportedLocales = env.NEXT_PUBLIC_SUPPORTED_LOCALES.split(',');
 
 // API configuration
 export const apiConfig = {
-  baseUrl: env.EXCHANGE_API_BASE_URL,
+  baseUrl: env.NEXT_PUBLIC_EXCHANGE_API_BASE_URL,
   timeout: 10000, // 10 seconds
   retries: 3,
 } as const;

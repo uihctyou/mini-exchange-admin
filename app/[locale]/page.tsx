@@ -17,7 +17,10 @@ export default function HomePage() {
 
   // Initialize authentication state on mount
   useEffect(() => {
-    initializeAuth();
+    const init = async () => {
+      await initializeAuth();
+    };
+    init();
   }, [initializeAuth]);
 
   // Handle redirects based on authentication status

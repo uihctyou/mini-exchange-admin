@@ -125,10 +125,10 @@ mini-exchange-admin/
 PORT=3011
 
 # 認證模式: BFF 或 DIRECT
-AUTH_MODE=BFF
+NEXT_PUBLIC_AUTH_MODE=BFF
 
 # 後端 API 基礎 URL
-EXCHANGE_API_BASE_URL=http://localhost:9977
+NEXT_PUBLIC_EXCHANGE_API_BASE_URL=http://localhost:9977/api
 
 # Cookie 設置 (BFF 模式)
 AUTH_COOKIE_NAME=access_token

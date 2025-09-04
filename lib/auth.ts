@@ -16,7 +16,7 @@ export interface AuthResponse {
 
 // Login credentials interface
 export interface LoginCredentials {
-  email: string;
+  usernameOrEmail: string;
   password: string;
   remember?: boolean;
 }
@@ -82,7 +82,7 @@ export function getTokenExpirationTime(token: string): number {
  */
 export async function getServerAuthToken(): Promise<string | null> {
   // This function should only be called from server-side API routes
-  if (env.AUTH_MODE !== 'BFF') return null;
+  if (env.NEXT_PUBLIC_AUTH_MODE !== 'BFF') return null;
   
   // Server-side cookie access should be handled in API routes
   return null;
@@ -94,7 +94,7 @@ export async function getServerAuthToken(): Promise<string | null> {
 export function getClientAuthToken(): string | null {
   if (typeof window === 'undefined') return null;
 
-  if (env.AUTH_MODE === 'BFF') {
+  if (env.NEXT_PUBLIC_AUTH_MODE === 'BFF') {
     // In BFF mode, token is in HttpOnly cookie, not accessible from client
     return null;
   } else {
@@ -109,7 +109,7 @@ export function getClientAuthToken(): string | null {
 export function setClientAuthToken(token: string, remember: boolean = false): void {
   if (typeof window === 'undefined') return;
 
-  if (env.AUTH_MODE === 'DIRECT') {
+  if (env.NEXT_PUBLIC_AUTH_MODE === 'DIRECT') {
     if (remember) {
       localStorage.setItem('access_token', token);
       sessionStorage.removeItem('access_token');
@@ -202,7 +202,7 @@ export async function logout(): Promise<void> {
   removeClientAuthToken();
 
   // For BFF mode, call logout API to clear server-side session
-  if (env.AUTH_MODE === 'BFF') {
+  if (env.NEXT_PUBLIC_AUTH_MODE === 'BFF') {
     try {
       await fetch('/api/auth/logout', {
         method: 'POST',

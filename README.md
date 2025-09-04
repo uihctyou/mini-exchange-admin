@@ -6,7 +6,7 @@
 
 - ✅ **Project Setup**: Complete Next.js 14 framework with TypeScript
 - ✅ **UI Components**: shadcn/ui components with Tailwind CSS
-- ✅ **Authentication**: Mock login system with role-based access control
+- ✅ **Authentication**: JWT-based authentication with role-based access control
 - ✅ **Internationalization**: English and Traditional Chinese support
 - ✅ **Route Protection**: Middleware-based authentication guards
 - ✅ **Dashboard**: Basic dashboard with statistics and system status
@@ -17,6 +17,10 @@
 ## Demo Credentials
 
 The application includes demo accounts for testing:
+
+## Demo Accounts
+
+The following demo accounts are available for testing (these should be configured in your backend):
 
 - **Admin**: `admin@example.com` / `admin123`
 - **Operator**: `operator@example.com` / `operator123`
@@ -125,10 +129,10 @@ Routes: `/en/...`, `/zh-TW/...`
 PORT=3011
 
 # Authentication mode: BFF or DIRECT
-AUTH_MODE=BFF
+NEXT_PUBLIC_AUTH_MODE=BFF
 
 # Backend API base URL
-EXCHANGE_API_BASE_URL=http://localhost:9977
+NEXT_PUBLIC_EXCHANGE_API_BASE_URL=http://localhost:9977/api
 
 # Cookie settings (BFF mode)
 AUTH_COOKIE_NAME=access_token
@@ -226,7 +230,7 @@ pnpm test         # Run tests
 To connect with real backend API:
 
 1. Update `.env.local` with your backend URL
-2. Replace mock login in `hooks/use-auth.ts` with real API calls
+2. ✅ **Completed**: Authentication now uses real API calls
 3. Configure CORS in your backend for `http://localhost:3011`
 4. Update authentication middleware to validate real JWT tokens
 

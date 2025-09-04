@@ -40,7 +40,7 @@ class HttpClient {
 
   constructor() {
     // Set base URL based on auth mode
-    this.baseUrl = env.AUTH_MODE === 'BFF' ? '/api' : env.EXCHANGE_API_BASE_URL;
+    this.baseUrl = env.NEXT_PUBLIC_AUTH_MODE === 'BFF' ? '/api' : env.NEXT_PUBLIC_EXCHANGE_API_BASE_URL;
     
     this.defaultHeaders = {
       'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ class HttpClient {
       return null;
     }
 
-    if (env.AUTH_MODE === 'BFF') {
+    if (env.NEXT_PUBLIC_AUTH_MODE === 'BFF') {
       // In BFF mode, token is in HttpOnly cookie, managed by server
       return null;
     } else {
@@ -75,7 +75,7 @@ class HttpClient {
     const headers = { ...this.defaultHeaders, ...customHeaders };
     
     const token = await this.getAuthToken();
-    if (token && env.AUTH_MODE === 'DIRECT') {
+    if (token && env.NEXT_PUBLIC_AUTH_MODE === 'DIRECT') {
       headers['Authorization'] = `Bearer ${token}`;
     }
     
@@ -106,7 +106,7 @@ class HttpClient {
     const requestConfig: RequestInit = {
       method,
       headers,
-      credentials: env.AUTH_MODE === 'BFF' ? 'include' : 'omit',
+      credentials: env.NEXT_PUBLIC_AUTH_MODE === 'BFF' ? 'include' : 'omit',
     };
 
     if (body && method !== 'GET') {
