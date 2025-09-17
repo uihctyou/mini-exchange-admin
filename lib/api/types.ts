@@ -169,10 +169,20 @@ export interface Role {
 
 // Authentication related data
 export interface LoginData {
-  token: string;
-  refreshToken: string;
-  user: User;
+  accessToken: string;
+  tokenType: string;
   expiresIn: number;
+  refreshToken: string;
+  userId: number;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  status: string;
+  kycLevel: number;
+  roles: string[];
+  permissions: string[] | null;
+  lastLoginAt: string;
 }
 
 export interface RefreshTokenData {

@@ -79,9 +79,21 @@ export class ApiClient {
       };
     }
 
+    // Handle your backend's response format: { success, message, data, timestamp }
+    if (data.success === false) {
+      return {
+        status: 'error',
+        error: {
+          code: 'API_ERROR',
+          message: data.message || 'API request failed',
+          details: data
+        }
+      };
+    }
+
     return {
       status: 'success',
-      body: data,
+      body: data.data || data, // Use data field if available, otherwise use full response
       message: data.message
     };
   }

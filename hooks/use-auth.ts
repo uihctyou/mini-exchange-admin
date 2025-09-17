@@ -96,10 +96,21 @@ export const useAuthStore = create<AuthState>()(
             return { success: false, error };
           }
 
-          const { user, token } = response.body;
+          const loginData = response.body;
+
+          // Create user object from login response
+          const user: User = {
+            id: loginData.userId.toString(),
+            name: `${loginData.firstName} ${loginData.lastName}`,
+            email: loginData.email,
+            roles: loginData.roles as any[], // Convert to UserRole enum if needed
+            isActive: loginData.status === 'ACTIVE',
+            lastLoginAt: new Date(loginData.lastLoginAt),
+            createdAt: new Date(), // We don't have this from API
+          };
 
           // Store token (client-side for Direct mode)
-          setClientAuthToken(token, remember);
+          setClientAuthToken(loginData.accessToken, remember);
 
           // Update state
           set({
