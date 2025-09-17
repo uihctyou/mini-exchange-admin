@@ -26,19 +26,19 @@ This document provides setup instructions and development guidelines for the min
 3. **Install additional UI components (optional):**
    ```bash
    # Install shadcn/ui CLI globally
-   npm install -g shadcn-ui
+   pnpm install -g shadcn-ui
 
    # Add additional components as needed
-   npx shadcn-ui@latest add table
-   npx shadcn-ui@latest add dialog
-   npx shadcn-ui@latest add dropdown-menu
-   npx shadcn-ui@latest add toast
-   npx shadcn-ui@latest add tabs
-   npx shadcn-ui@latest add switch
-   npx shadcn-ui@latest add select
-   npx shadcn-ui@latest add checkbox
-   npx shadcn-ui@latest add label
-   npx shadcn-ui@latest add separator
+   pnpx shadcn-ui@latest add table
+   pnpx shadcn-ui@latest add dialog
+   pnpx shadcn-ui@latest add dropdown-menu
+   pnpx shadcn-ui@latest add toast
+   pnpx shadcn-ui@latest add tabs
+   pnpx shadcn-ui@latest add switch
+   pnpx shadcn-ui@latest add select
+   pnpx shadcn-ui@latest add checkbox
+   pnpx shadcn-ui@latest add label
+   pnpx shadcn-ui@latest add separator
    ```
 
 4. **Start development server:**
@@ -132,7 +132,7 @@ The project uses **shadcn/ui** components built on top of **Radix UI** and **Tai
 ### Adding New Components
 
 ```bash
-npx shadcn-ui@latest add [component-name]
+pnpx shadcn-ui@latest add [component-name]
 ```
 
 ### Component Examples

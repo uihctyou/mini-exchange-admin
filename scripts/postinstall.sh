@@ -75,7 +75,7 @@ components=(
 # For now, we'll create a note about manual installation
 echo "📋 Components to install manually with shadcn CLI:"
 for component in "${components[@]}"; do
-  echo "  - npx shadcn-ui@latest add $component"
+  echo "  - pnpx shadcn-ui@latest add $component"
 done
 
 # Create TypeScript path mapping file
